@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ffe4f0 0%, #fff0f7 50%, #fff5fa 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Sparkles Animation */
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffb3d9;
+            border-radius: 50%;
+            animation: sparkle 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100vh;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff69b4;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+        }
+
+        .heart {
+            font-size: 4em;
+            margin: 20px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1);
+            }
+        }
+
+        .question {
+            font-size: 1.8em;
+            color: #ff69b4;
+            margin: 30px 0;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(255, 182, 193, 0.3);
+        }
+
+        .buttons-container {
+            position: relative;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 60px;
+            height: calc(100vh - 400px);
+            width: 100%;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 182, 193, 0.3);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #ffb3d9, #ffc2e2);
+            color: white;
+            z-index: 2;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 179, 217, 0.5);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #fff0f7, #fff5fa);
+            color: #ff69b4;
+            border: 2px solid #ffb3d9;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .no-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Celebration styles */
+        .celebration {
+            display: none;
+            text-align: center;
+        }
+
+        .celebration.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .celebration h2 {
+            font-size: 3em;
+            color: #ff69b4;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.3);
+        }
+
+        .love-text {
+            font-size: 2.5em;
+            color: #ff69b4;
+            font-weight: bold;
+            margin-top: 20px;
+            animation: pulse 1s infinite;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffb3d9;
+            animation: confetti-fall 3s linear infinite;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .emoji-rain {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 4s linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .footer-text {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.3em;
+            color: #ff69b4;
+            font-style: italic;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(255, 182, 193, 0.3);
+            z-index: 100;
+        }
+
+        /* Name Input Modal */
+        .name-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .name-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .name-modal h2 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #ffb3d9;
+            border-radius: 50px;
+            margin: 20px 0;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .name-input:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .submit-name {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            background: linear-gradient(135deg, #ffb3d9, #ffc2e2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .submit-name:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 179, 217, 0.5);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Name Input Modal -->
+    <div class="name-modal" id="nameModal">
+        <div class="name-modal-content">
+            <h2>💕 Before we begin... 💕</h2>
+            <p style="font-size: 1.2em; color: #666; margin-bottom: 20px;">
+                What should I call you?
+            </p>
+            <input type="text" class="name-input" id="userNameInput" placeholder="Enter your name here..." maxlength="20">
+            <button class="submit-name" onclick="saveName()">Let's Go! 💖</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="question-container hidden" id="questionContainer">
+            <h1 id="greeting">Hey! 💕</h1>
+            <div class="heart">❤️</div>
+            <p class="question">Will You Be My Valentine?</p>
+            
+            <div class="buttons-container">
+                <button class="yes-btn" onclick="sayYes()">Yes! 💖</button>
+                <button class="no-btn" id="noBtn" onmouseenter="moveButton()" onclick="moveButton()">No</button>
+            </div>
+        </div>
+
+        <div class="celebration" id="celebration">
+            <h2>🎉 Yay! 🎉</h2>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZGJ2eGxkampqdHhlNWg0cHd4aHcydm4zaDVnODQyajFnamQ5bTl6diZlcD12MV9naWZzX3NlYXJjaCZjdD1n/IzXiddo2twMmdmU8Lv/giphy.gif" alt="Applause" style="width: 300px; margin: 30px 0; border-radius: 20px;">
+            <p class="love-text" id="loveMessage">I Love You!</p>
+        </div>
+    </div>
+
+    <div class="footer-text" id="footerText">Made with love for someone special 💕</div>
+
+    <script>
+        let userName = "";
+
+        // Save name and start the experience
+        function saveName() {
+            const nameInput = document.getElementById('userNameInput');
+            userName = nameInput.value.trim();
+            
+            if (userName === "") {
+                userName = "You"; // Default if no name entered
+            }
+            
+            // Update greeting
+            document.getElementById('greeting').textContent = `Hey ${userName}! 💕`;
+            document.getElementById('loveMessage').textContent = `I Love You, ${userName}!`;
+            
+            // Hide modal and show main content
+            document.getElementById('nameModal').style.display = 'none';
+            document.getElementById('questionContainer').classList.remove('hidden');
+            
+            // Start sparkles
+            createSparkles();
+            setInterval(createSparkles, 3000);
+        }
+
+        // Create sparkles
+        function createSparkles() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 3 + 's';
+                    document.body.appendChild(sparkle);
+                }, i * 100);
+            }
+        }
+
+        let noButtonClickCount = 0;
+        const noBtn = document.getElementById('noBtn');
+
+        function moveButton() {
+            noButtonClickCount++;
+            
+            if (noButtonClickCount >= 10) {
+                // On 10th attempt, move behind yes button
+                const yesBtn = document.querySelector('.yes-btn');
+                const yesBtnRect = yesBtn.getBoundingClientRect();
+                const container = document.querySelector('.buttons-container');
+                const containerRect = container.getBoundingClientRect();
+                
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = (yesBtnRect.left - containerRect.left) + 'px';
+                noBtn.style.top = (yesBtnRect.top - containerRect.top) + 'px';
+                noBtn.style.zIndex = '0';
+                return;
+            }
+
+            // Random positions for first 9 attempts - bigger movement range
+            const container = document.querySelector('.buttons-container');
+            const containerRect = container.getBoundingClientRect();
+            
+            const maxX = containerRect.width - noBtn.offsetWidth - 20;
+            const maxY = containerRect.height - noBtn.offsetHeight - 20;
+            
+            // Generate random position with minimum distance from current position
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        function sayYes() {
+            document.querySelector('.question-container').style.display = 'none';
+            document.getElementById('celebration').classList.add('active');
+            
+            // Update footer text for celebration
+            document.getElementById('footerText').textContent = "May this Valentine's Day be filled with love and joy! 💝";
+            
+            // Create confetti
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = ['#ffb3d9', '#ffc2e2', '#ffd6ec', '#ffe0f0'][Math.floor(Math.random() * 4)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                }, i * 30);
+            }
+
+            // Create emoji rain
+            const emojis = ['❤️', '💕', '💖', '💗', '💝', '💘', '😍', '🥰'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'emoji-rain';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.animationDelay = Math.random() * 2 + 's';
+                    emoji.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                    document.body.appendChild(emoji);
+                }, i * 100);
+            }
+        }
+
+        // Focus on input when modal loads
+        window.onload = function() {
+            document.getElementById('userNameInput').focus();
+            
+            // Enter key support for name input
+            document.getElementById('userNameInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    saveName();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
