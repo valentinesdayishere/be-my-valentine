@@ -17,8 +17,9 @@
             min-height: 100vh;
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a0b2e 50%, #0a0a0a 100%);
+            background: #0a0a0a;
             touch-action: manipulation;
+            position: relative;
         }
 
         /* Animated Background */
@@ -205,7 +206,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.1;
+            opacity: 0.3;
             border-radius: 30px;
             z-index: -1;
         }
@@ -325,7 +326,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.15;
+            opacity: 0.25;
             border-radius: 40px;
             z-index: -1;
         }
@@ -417,14 +418,37 @@
             margin-bottom: 35px;
         }
 
-        /* Buttons Container */
+        /* Buttons Container - Fixed for separate buttons */
         .buttons-area {
             position: relative;
-            min-height: 140px;
+            min-height: 180px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px;
+            justify-content: flex-start;
+            gap: 25px;
+            margin-top: 20px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Yes Button Container */
+        .yes-button-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        /* No Button Container */
+        .no-button-container {
+            position: relative;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
         }
 
         .btn {
@@ -446,7 +470,7 @@
             background: linear-gradient(135deg, #ec4899, #db2777);
             color: white;
             box-shadow: 0 15px 40px rgba(236, 72, 153, 0.5);
-            z-index: 2;
+            position: relative;
         }
 
         .btn-yes:hover {
@@ -454,6 +478,7 @@
             box-shadow: 0 20px 50px rgba(236, 72, 153, 0.6);
         }
 
+        /* No Button - Moves within its container */
         .btn-no {
             padding: 15px 50px;
             font-size: 1em;
@@ -462,16 +487,10 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: absolute;
-            z-index: 3;
             backdrop-filter: blur(10px);
-        }
-
-        .btn-no.surrendered {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            color: white;
-            border: none;
-            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
-            z-index: 1;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         /* ============== SUCCESS SCREEN ============== */
@@ -548,6 +567,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 1;
         }
 
         .couple-glow {
@@ -618,22 +638,49 @@
             50% { background-position: 100% 50%; }
         }
 
-        .success-message {
-            font-size: 1.3em;
-            color: rgba(255, 255, 255, 0.9);
-            animation: messageReveal 1s ease 0.9s both;
-            max-width: 500px;
-            line-height: 1.6;
-            text-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+        /* Sender's message container - No emoji before */
+        .sender-message {
+            background: rgba(236, 72, 153, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            max-width: 600px;
+            animation: messageReveal 1s ease 1.5s both;
+            position: relative;
         }
 
-        .personal-message {
-            font-size: 1.1em;
-            color: rgba(255, 255, 255, 0.7);
-            animation: messageReveal 1s ease 1.2s both;
-            margin-top: 10px;
+        /* REMOVED: The ::before content with 💌 emoji */
+        /* .sender-message::before {
+            content: '💌';
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            font-size: 1.5em;
+            background: #0a0a0a;
+            padding: 0 10px;
+        } */
+
+        .sender-text {
+            font-size: 1.4em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
             font-style: italic;
-            max-width: 600px;
+        }
+
+        /* Sender signature WITH emoji */
+        .sender-signature {
+            font-size: 1.5em;
+            color: #f472b6;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        /* Emoji in signature */
+        .signature-emoji {
+            margin-left: 8px;
+            font-size: 1.2em;
         }
 
         @keyframes messageReveal {
@@ -792,6 +839,15 @@
                 font-size: 0.95em;
             }
             
+            .buttons-area {
+                min-height: 160px;
+                gap: 20px;
+            }
+            
+            .no-button-container {
+                height: 90px;
+            }
+            
             .success-title {
                 font-size: 2.5em;
             }
@@ -800,14 +856,13 @@
                 font-size: 2.8em;
             }
             
-            .success-message {
+            .sender-text {
                 font-size: 1.2em;
-                padding: 0 20px;
             }
             
-            .personal-message {
-                font-size: 1em;
-                padding: 0 20px;
+            .sender-message {
+                padding: 20px;
+                margin: 20px 15px;
             }
             
             .couple-gif-container {
@@ -876,8 +931,12 @@
             }
             
             .buttons-area {
-                min-height: 110px;
-                gap: 10px;
+                min-height: 140px;
+                gap: 15px;
+            }
+            
+            .no-button-container {
+                height: 80px;
             }
             
             .success-title {
@@ -888,12 +947,13 @@
                 font-size: 2.2em;
             }
             
-            .success-message {
+            .sender-text {
                 font-size: 1.1em;
             }
             
-            .personal-message {
-                font-size: 0.95em;
+            .sender-message {
+                padding: 15px;
+                margin: 15px 10px;
             }
             
             .couple-gif-container {
@@ -1028,8 +1088,12 @@
                 <p class="subtitle" id="receiverDisplay">To: <span id="receiverNameSpan">You</span></p>
 
                 <div class="buttons-area" id="buttonsArea">
-                    <button class="btn btn-yes" id="yesBtn">Yes, A Thousand Times Yes! 💖</button>
-                    <button class="btn btn-no" id="noBtn">Maybe Later...</button>
+                    <div class="yes-button-container">
+                        <button class="btn btn-yes" id="yesBtn">Yes, A Thousand Times Yes!</button>
+                    </div>
+                    <div class="no-button-container" id="noButtonContainer">
+                        <button class="btn btn-no" id="noBtn">No</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1047,8 +1111,11 @@
 
             <h2 class="success-title">Happy Valentine's Day!</h2>
             <p class="success-names" id="successNames"></p>
-            <p class="success-message" id="successMessage"></p>
-            <p class="personal-message" id="personalMessage">Every moment with you feels like a beautiful dream. Thank you for saying yes!</p>
+            
+            <div class="sender-message" id="senderMessage">
+                <div class="sender-text" id="senderText"></div>
+                <div class="sender-signature" id="senderSignature"></div>
+            </div>
         </div>
     </div>
 
@@ -1062,6 +1129,25 @@
 
         let receiverName = '';
         let senderName = '';
+
+        // Sender's romantic messages (using sender's name)
+        const senderMessages = [
+            "From the moment I saw you, I knew my search was over. You're everything I never knew I needed.",
+            "Every day with you feels like a beautiful dream I never want to wake up from. You're my forever Valentine.",
+            "My heart beats only for you. Thank you for making every moment magical.",
+            "You're not just my Valentine, you're my always and forever. I love you more with each passing day.",
+            "With you, I found a love that lights up my world. Thank you for being mine.",
+            "You're the missing piece I've been searching for my whole life. I'm so grateful you're mine.",
+            "Every laugh, every smile, every moment with you is a treasure. I'm the luckiest person alive.",
+            "My love for you grows stronger every day. You're my greatest adventure and my safest home.",
+            "You make my world brighter just by being in it. I can't imagine my life without you.",
+            "You're the answer to every prayer I never said out loud. Thank you for choosing me."
+        ];
+
+        // Get random message from sender
+        function getRandomSenderMessage() {
+            return senderMessages[Math.floor(Math.random() * senderMessages.length)];
+        }
 
         // Create stars
         function createStars() {
@@ -1164,9 +1250,11 @@
             
             // Success screen names
             document.getElementById('successNames').textContent = `${senderName} & ${receiverName}`;
-            document.getElementById('successMessage').innerHTML = 
-                `From <span style="color:#ec4899; font-weight:600">${senderName}</span> to <span style="color:#f472b6; font-weight:600">${receiverName}</span><br>
-                Your special connection has been sealed with love! 💖`;
+            
+            // Sender's personalized message (without emoji in message)
+            document.getElementById('senderText').textContent = getRandomSenderMessage();
+            // Signature WITH emoji
+            document.getElementById('senderSignature').innerHTML = `- ${senderName} <span class="signature-emoji">💕</span>`;
             
             // Hide setup, show main content
             document.getElementById('setupModal').style.display = 'none';
@@ -1178,24 +1266,34 @@
             createFloatingHearts();
             setInterval(createFloatingHearts, 15000);
             
-            // Initialize enhanced No button
+            // Initialize the No button
             initNoButton();
             
             // Add Yes button event listener
             document.getElementById('yesBtn').addEventListener('click', sayYes);
         }
 
-        // Enhanced No button logic
+        // Initialize No button - Simple moving button like in the example website
         function initNoButton() {
             const noBtn = document.getElementById('noBtn');
-            const yesBtn = document.getElementById('yesBtn');
-            const buttonsArea = document.getElementById('buttonsArea');
-            let hoverCount = 0;
-            let clickCount = 0;
-            const maxHovers = 8;
+            const noButtonContainer = document.getElementById('noButtonContainer');
             let isMoving = false;
-            let escapeAttempts = 0;
-
+            
+            // Text variations for the No button
+            const noTexts = [
+                "No",
+                "Nope",
+                "Maybe",
+                "Later",
+                "Not sure",
+                "Hmm",
+                "Thinking",
+                "Really?",
+                "Umm",
+                "Try again"
+            ];
+            
+            // Simple function to move the button randomly within its container
             function moveNoButton(event) {
                 if (isMoving) return;
                 isMoving = true;
@@ -1205,111 +1303,48 @@
                     event.stopPropagation();
                 }
                 
-                hoverCount++;
-                clickCount++;
-                escapeAttempts++;
-                
-                const areaRect = buttonsArea.getBoundingClientRect();
+                const containerRect = noButtonContainer.getBoundingClientRect();
                 const btnRect = noBtn.getBoundingClientRect();
                 
-                // Make it progressively harder
-                const difficulty = Math.min(escapeAttempts / 10, 0.8);
+                // Calculate available space within the container
+                const maxX = containerRect.width - btnRect.width - 10;
+                const maxY = containerRect.height - btnRect.height - 10;
                 
-                // Random movement with increasing difficulty
-                const maxX = areaRect.width - btnRect.width;
-                const maxY = areaRect.height - btnRect.height;
+                // Generate random position within the container
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
                 
-                let randomX, randomY;
+                // Move the button with a smooth transition
+                noBtn.style.transition = 'all 0.3s ease';
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
                 
-                if (Math.random() > 0.7 && escapeAttempts > 3) {
-                    // Move to edge
-                    randomX = Math.random() > 0.5 ? 0 : maxX;
-                    randomY = Math.random() * maxY;
-                } else if (Math.random() > 0.5 && escapeAttempts > 5) {
-                    // Move near cursor (but opposite direction)
-                    randomX = (0.5 - Math.random()) * maxX * 0.8;
-                    randomY = (0.5 - Math.random()) * maxY * 0.8;
-                } else {
-                    // Random position
-                    randomX = (Math.random() - 0.5) * maxX * (1 + difficulty);
-                    randomY = Math.random() * maxY * (1 + difficulty);
+                // Randomly change the text sometimes
+                if (Math.random() > 0.7) {
+                    noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
                 }
                 
-                // Clamp to area
-                randomX = Math.max(-maxX * 0.5, Math.min(maxX * 0.5, randomX));
-                randomY = Math.max(0, Math.min(maxY, randomY));
-                
-                // Add shake effect on higher attempts
-                const shakeX = escapeAttempts > 3 ? (Math.random() - 0.5) * 20 : 0;
-                const shakeY = escapeAttempts > 3 ? (Math.random() - 0.5) * 20 : 0;
-                
-                // Dynamic speed based on attempts
-                const speed = Math.max(0.1, 0.5 - (escapeAttempts * 0.05));
-                
-                noBtn.style.transition = `all ${speed}s cubic-bezier(0.34, 1.56, 0.64, 1)`;
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = (randomX + shakeX) + 'px';
-                noBtn.style.top = (randomY + shakeY) + 'px';
-                
-                // Change text based on attempts
-                const texts = [
-                    "Maybe Later...",
-                    "I'm Shy!",
-                    "Try Again?",
-                    "Not Today!",
-                    "Too Fast!",
-                    "Catch Me!",
-                    "Almost!",
-                    "One More Try!"
-                ];
-                noBtn.innerHTML = texts[Math.min(escapeAttempts - 1, texts.length - 1)] || "Okay, Yes! ❤️";
-                
-                // Reduce size after many attempts
-                if (escapeAttempts > 5) {
-                    noBtn.style.transform = `scale(${0.9 - (escapeAttempts * 0.05)})`;
-                }
-                
-                // Surrender after max attempts
-                if (escapeAttempts >= maxHovers) {
-                    setTimeout(() => {
-                        noBtn.style.transition = 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                        noBtn.style.left = '0';
-                        noBtn.style.top = '60px';
-                        noBtn.style.transform = 'scale(1)';
-                        noBtn.classList.add('surrendered');
-                        noBtn.innerHTML = 'Okay, Yes! ❤️';
-                        
-                        // Remove event listeners and add click to sayYes
-                        noBtn.removeEventListener('mouseenter', moveNoButton);
-                        noBtn.removeEventListener('click', moveNoButton);
-                        noBtn.removeEventListener('touchstart', moveNoButton);
-                        noBtn.addEventListener('click', sayYes);
-                        
-                        // Make button clickable for touch
-                        noBtn.style.pointerEvents = 'auto';
-                    }, 300);
-                }
-                
+                // Reset the moving flag after the transition
                 setTimeout(() => {
                     isMoving = false;
-                }, speed * 1000);
+                }, 300);
             }
-
-            // Add event listeners for No button
+            
+            // Add event listeners
             noBtn.addEventListener('mouseenter', moveNoButton);
             noBtn.addEventListener('click', moveNoButton);
             noBtn.addEventListener('touchstart', moveNoButton);
-
-            // Add mousemove detection to buttons area
-            buttonsArea.addEventListener('mousemove', (e) => {
+            
+            // Also move when mouse gets close (like in the example)
+            noButtonContainer.addEventListener('mousemove', (e) => {
                 const btnRect = noBtn.getBoundingClientRect();
                 const distance = Math.sqrt(
                     Math.pow(e.clientX - (btnRect.left + btnRect.width/2), 2) +
                     Math.pow(e.clientY - (btnRect.top + btnRect.height/2), 2)
                 );
                 
-                if (distance < 100 && escapeAttempts < maxHovers && !isMoving && Math.random() > 0.7) {
-                    moveNoButton();
+                if (distance < 80 && !isMoving && Math.random() > 0.7) {
+                    moveNoButton(e);
                 }
             });
         }
@@ -1371,17 +1406,17 @@
             const colors = ['#ec4899', '#f472b6', '#fda4af', '#fbcfe8', '#fbbf24', '#a855f7'];
             const container = document.querySelector('.success-content');
 
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 60; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'explosion-particle';
                 particle.style.left = '50%';
                 particle.style.top = '40%';
-                particle.style.width = (5 + Math.random() * 10) + 'px';
+                particle.style.width = (5 + Math.random() * 12) + 'px';
                 particle.style.height = particle.style.width;
                 particle.style.background = colors[Math.floor(Math.random() * colors.length)];
 
-                const angle = (i / 40) * Math.PI * 2;
-                const distance = 80 + Math.random() * 150;
+                const angle = (i / 60) * Math.PI * 2;
+                const distance = 100 + Math.random() * 200;
                 const tx = Math.cos(angle) * distance;
                 const ty = Math.sin(angle) * distance;
 
@@ -1413,19 +1448,19 @@
             const hearts = ['💕', '💖', '💗', '❤️'];
 
             setInterval(() => {
-                for (let i = 0; i < 3; i++) {
+                for (let i = 0; i < 5; i++) {
                     const heart = document.createElement('div');
                     heart.className = 'burst-heart';
                     heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
                     heart.style.left = '50%';
                     heart.style.top = '50%';
-                    heart.style.setProperty('--tx', (Math.random() - 0.5) * 150 + 'px');
-                    heart.style.setProperty('--ty', -40 - Math.random() * 80 + 'px');
-                    heart.style.animationDelay = (i * 0.2) + 's';
+                    heart.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+                    heart.style.setProperty('--ty', -50 - Math.random() * 120 + 'px');
+                    heart.style.animationDelay = (i * 0.15) + 's';
                     container.appendChild(heart);
                     setTimeout(() => heart.remove(), 2000);
                 }
-            }, 1000);
+            }, 700);
         }
 
         // Confetti
@@ -1433,19 +1468,19 @@
             const colors = ['#ec4899', '#f472b6', '#fda4af', '#fbbf24', '#a855f7', '#34d399', '#60a5fa'];
             const shapes = ['❤️', '★', '●', '■'];
 
-            for (let i = 0; i < 80; i++) {
+            for (let i = 0; i < 120; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.className = 'confetti';
                     confetti.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
                     confetti.style.left = Math.random() * 100 + 'vw';
                     confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.fontSize = (8 + Math.random() * 15) + 'px';
+                    confetti.style.fontSize = (10 + Math.random() * 20) + 'px';
                     confetti.style.animation = `confettiFall ${3 + Math.random() * 2}s linear forwards`;
                     confetti.style.animationDelay = Math.random() + 's';
                     document.body.appendChild(confetti);
                     setTimeout(() => confetti.remove(), 5000);
-                }, i * 40);
+                }, i * 25);
             }
         }
 
@@ -1463,13 +1498,13 @@
                 container.style.left = x + 'vw';
                 container.style.top = y + 'vh';
 
-                for (let i = 0; i < 20; i++) {
+                for (let i = 0; i < 30; i++) {
                     const particle = document.createElement('div');
                     particle.className = 'firework-particle';
                     particle.style.background = color;
 
-                    const angle = (i / 20) * Math.PI * 2;
-                    const distance = 40 + Math.random() * 60;
+                    const angle = (i / 30) * Math.PI * 2;
+                    const distance = 60 + Math.random() * 100;
                     particle.style.setProperty('--fx', Math.cos(angle) * distance + 'px');
                     particle.style.setProperty('--fy', Math.sin(angle) * distance + 'px');
 
@@ -1481,14 +1516,14 @@
             }
 
             // Launch fireworks repeatedly
-            for (let i = 0; i < 10; i++) {
-                setTimeout(launchFirework, i * 400);
+            for (let i = 0; i < 15; i++) {
+                setTimeout(launchFirework, i * 300);
             }
             setInterval(() => {
-                for (let i = 0; i < 3; i++) {
-                    setTimeout(launchFirework, i * 300);
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(launchFirework, i * 200);
                 }
-            }, 2000);
+            }, 1800);
         }
 
         // Flying hearts across screen
@@ -1500,7 +1535,7 @@
                 const heart = document.createElement('div');
                 heart.className = 'flying-heart';
                 heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
-                heart.style.fontSize = (15 + Math.random() * 30) + 'px';
+                heart.style.fontSize = (25 + Math.random() * 40) + 'px';
                 heart.style.color = `hsl(${330 + Math.random() * 30}, 80%, 60%)`;
 
                 const startX = Math.random() * 100;
@@ -1508,14 +1543,14 @@
                 heart.style.left = startX + 'vw';
                 heart.style.top = startY + 'vh';
 
-                heart.style.setProperty('--mx1', (Math.random() - 0.5) * 150 + 'px');
-                heart.style.setProperty('--my1', -150 - Math.random() * 80 + 'px');
-                heart.style.setProperty('--mx2', (Math.random() - 0.5) * 300 + 'px');
-                heart.style.setProperty('--my2', -400 - Math.random() * 200 + 'px');
+                heart.style.setProperty('--mx1', (Math.random() - 0.5) * 250 + 'px');
+                heart.style.setProperty('--my1', -200 - Math.random() * 120 + 'px');
+                heart.style.setProperty('--mx2', (Math.random() - 0.5) * 450 + 'px');
+                heart.style.setProperty('--my2', -550 - Math.random() * 250 + 'px');
 
                 container.appendChild(heart);
                 setTimeout(() => heart.remove(), 4000);
-            }, 200);
+            }, 150);
         }
 
         // Prevent zoom on mobile
