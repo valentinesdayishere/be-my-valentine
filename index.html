@@ -1102,6 +1102,10 @@
     <!-- Success Screen -->
     <div class="success-screen" id="successScreen">
         <div class="success-bg"></div>
+        
+        <!-- Hidden YouTube Player for Background Music -->
+        <div id="youtube-player" style="position: fixed; top: -9999px; left: -9999px;"></div>
+        
         <div class="success-content">
             <div class="couple-gif-container">
                 <div class="couple-glow"></div>
@@ -1109,7 +1113,7 @@
                      alt="Milk and Mocha Bears Hugging" class="couple-gif">
             </div>
 
-            <h2 class="success-title">Happy Valentine's Day!</h2>
+            <h2 class="success-title" id="successTitle">Happy Valentine's Day my love, <span id="receiverNameSuccess"></span></h2>
             <p class="success-names" id="successNames"></p>
             
             <div class="sender-message" id="senderMessage">
@@ -1121,7 +1125,35 @@
 
     <div class="footer" id="footer">Made with ❤️ for Valentine's Day</div>
 
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
     <script>
+        // YouTube Player variable
+        let player;
+        
+        // YouTube IFrame API ready callback
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'x55A69SSvsg',
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'x55A69SSvsg'
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            // Player is ready but won't play until sayYes() is called
+        }
+        
         // Check URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const receiver = urlParams.get('to');
@@ -1249,7 +1281,8 @@
             document.getElementById('greeting').textContent = `Will You Be My Valentine, ${receiverName}?`;
             
             // Success screen names
-            document.getElementById('successNames').textContent = `${senderName} & ${receiverName}`;
+            document.getElementById('receiverNameSuccess').textContent = receiverName;
+            document.getElementById('successNames').textContent = `${senderName} ❤️ ${receiverName}`;
             
             // Sender's personalized message (without emoji in message)
             document.getElementById('senderText').textContent = getRandomSenderMessage();
@@ -1274,79 +1307,128 @@
         }
 
         // Initialize No button - Simple moving button like in the example website
+        let noButtonMoveCount = 0;
+        
         function initNoButton() {
             const noBtn = document.getElementById('noBtn');
             const noButtonContainer = document.getElementById('noButtonContainer');
-            let isMoving = false;
-            
-            // Text variations for the No button
-            const noTexts = [
-                "No",
-                "Nope",
-                "Maybe",
-                "Later",
-                "Not sure",
-                "Hmm",
-                "Thinking",
-                "Really?",
-                "Umm",
-                "Try again"
-            ];
-            
-            // Simple function to move the button randomly within its container
-            function moveNoButton(event) {
-                if (isMoving) return;
-                isMoving = true;
-                
-                if (event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                
-                const containerRect = noButtonContainer.getBoundingClientRect();
-                const btnRect = noBtn.getBoundingClientRect();
-                
-                // Calculate available space within the container
-                const maxX = containerRect.width - btnRect.width - 10;
-                const maxY = containerRect.height - btnRect.height - 10;
-                
-                // Generate random position within the container
-                const randomX = Math.random() * maxX;
-                const randomY = Math.random() * maxY;
-                
-                // Move the button with a smooth transition
-                noBtn.style.transition = 'all 0.3s ease';
-                noBtn.style.left = randomX + 'px';
-                noBtn.style.top = randomY + 'px';
-                
-                // Randomly change the text sometimes
-                if (Math.random() > 0.7) {
-                    noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
-                }
-                
-                // Reset the moving flag after the transition
-                setTimeout(() => {
-                    isMoving = false;
-                }, 300);
-            }
             
             // Add event listeners
             noBtn.addEventListener('mouseenter', moveNoButton);
             noBtn.addEventListener('click', moveNoButton);
             noBtn.addEventListener('touchstart', moveNoButton);
             
-            // Also move when mouse gets close (like in the example)
+            // Also move when mouse gets close
             noButtonContainer.addEventListener('mousemove', (e) => {
+                if (noButtonMoveCount >= 5) return;
+                
                 const btnRect = noBtn.getBoundingClientRect();
                 const distance = Math.sqrt(
                     Math.pow(e.clientX - (btnRect.left + btnRect.width/2), 2) +
                     Math.pow(e.clientY - (btnRect.top + btnRect.height/2), 2)
                 );
                 
-                if (distance < 80 && !isMoving && Math.random() > 0.7) {
-                    moveNoButton(e);
+                if (distance < 80 && Math.random() > 0.7) {
+                    moveNoButton();
                 }
             });
+        }
+
+        // ============== NO BUTTON MOVEMENT ==============
+        function moveNoButton() {
+            if (noButtonMoveCount >= 5) {
+                // After 5 tries, remove the button
+                document.getElementById('noBtn').style.display = 'none';
+                document.getElementById('noButtonContainer').innerHTML =
+                     '<div style="color: rgba(255,255,255,0.6); font-style: italic;">The "Yes" button looks much better! 😉</div>';
+                return;
+            }
+                     
+            const button = document.getElementById('noBtn');
+            const container = document.getElementById('noButtonContainer');
+                     
+            // Get container dimensions
+            const containerRect = container.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+                     
+            // Get button dimensions
+            const buttonRect = button.getBoundingClientRect();
+            const buttonWidth = buttonRect.width;
+            const buttonHeight = buttonRect.height;
+                     
+            // Calculate maximum movement range
+            const maxX = (containerWidth - buttonWidth) / 2;
+            const maxY = (containerHeight - buttonHeight) / 2;
+                     
+            // Generate random position within container
+            const randomX = (Math.random() - 0.5) * 2 * maxX;
+            const randomY = (Math.random() - 0.5) * 2 * maxY;
+                     
+            // Apply movement with animation
+            button.style.transform = `translate(calc(-50% + ${randomX}px), calc(-50% + ${randomY}px))`;
+            button.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                     
+            // Change button text occasionally
+            if (Math.random() > 0.7) {
+                const funnyTexts = [
+                    "Are you sure?",
+                    "Try again!",
+                    "Not so fast!",
+                    "Think about it!",
+                    "Maybe click Yes?",
+                    "Oops! Wrong button!"
+                ];
+                button.textContent = funnyTexts[Math.floor(Math.random() * funnyTexts.length)];
+            }
+                     
+            noButtonMoveCount++;
+                     
+            // Create a little sparkle effect
+            createSparkle(buttonRect.left + buttonWidth/2, buttonRect.top + buttonHeight/2);
+        }
+        
+        // Create sparkle effect
+        function createSparkle(x, y) {
+            const colors = ['#ec4899', '#f472b6', '#fda4af', '#fbbf24', '#a855f7'];
+            
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.style.position = 'fixed';
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                sparkle.style.width = '6px';
+                sparkle.style.height = '6px';
+                sparkle.style.borderRadius = '50%';
+                sparkle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                sparkle.style.pointerEvents = 'none';
+                sparkle.style.zIndex = '9999';
+                
+                const angle = (i / 8) * Math.PI * 2;
+                const distance = 30 + Math.random() * 20;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                sparkle.style.animation = 'sparkleOut 0.6s ease-out forwards';
+                sparkle.style.setProperty('--sparkle-x', tx + 'px');
+                sparkle.style.setProperty('--sparkle-y', ty + 'px');
+                
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 600);
+            }
+            
+            // Add sparkle animation if not exists
+            if (!document.getElementById('sparkleKeyframes')) {
+                const style = document.createElement('style');
+                style.id = 'sparkleKeyframes';
+                style.textContent = `
+                    @keyframes sparkleOut {
+                        0% { transform: translate(0, 0) scale(1); opacity: 1; }
+                        100% { transform: translate(var(--sparkle-x), var(--sparkle-y)) scale(0); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         }
 
         // Check if URL has parameters on load
@@ -1390,6 +1472,11 @@
             
             mainContent.style.display = 'none';
             successScreen.classList.add('show');
+
+            // Play YouTube video as background music
+            if (player && player.playVideo) {
+                player.playVideo();
+            }
 
             // Create celebration effects
             setTimeout(() => {
