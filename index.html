@@ -1313,10 +1313,19 @@
             const noBtn = document.getElementById('noBtn');
             const noButtonContainer = document.getElementById('noButtonContainer');
             
-            // Add event listeners
+            // Prevent the No button from being clicked - only move it
+            noBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                moveNoButton();
+            });
+            
+            // Add event listeners for movement
             noBtn.addEventListener('mouseenter', moveNoButton);
-            noBtn.addEventListener('click', moveNoButton);
-            noBtn.addEventListener('touchstart', moveNoButton);
+            noBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                moveNoButton();
+            });
             
             // Also move when mouse gets close
             noButtonContainer.addEventListener('mousemove', (e) => {
@@ -1442,6 +1451,7 @@
             const coupleGif = new Image();
             coupleGif.src = 'https://media.giphy.com/media/IzXiddo2twMmdmU8Lv/giphy.gif';
             
+            // Check if URL has parameters - if yes, go directly to the message
             if (receiver && sender) {
                 // Direct link with parameters - start experience immediately
                 startExperience(sender, receiver);
